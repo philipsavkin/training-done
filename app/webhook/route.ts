@@ -1,3 +1,5 @@
+import { getActivity, getAthleteStats } from '@/lib/strava-api'
+import * as db from '../../database'
 import { StravaWebhookDataSchema } from '@/lib/strava-schema'
 import { NextResponse } from 'next/server'
 
@@ -9,7 +11,12 @@ export async function POST(request: Request) {
     return new Response('EVENT_RECEIVED')
   }
 
-  console.log('webhook event received, successfully parsed!', parseResult.data)
+  const { data } = parseResult
+  console.log('webhook event received, successfully parsed!', data)
+  if (data.object_type === 'activity') {
+    // no await, respond immediately
+    fetchActivityAndStats(data.object_id)
+  }
   return new Response('EVENT_RECEIVED')
 }
 
@@ -35,4 +42,11 @@ export async function GET(request: Request) {
     }
   }
   return new Response('', { status: 400 })
+}
+
+async function fetchActivityAndStats(activityId: number) {
+  const activity = await getActivity(activityId)
+  await db.activity.create(activity)
+  const stats = await getAthleteStats(activity.athlete.id)
+  await db.activityStats.create(activity.athlete.id, stats)
 }

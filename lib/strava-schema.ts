@@ -85,3 +85,27 @@ export const StravaWebhookDataSchema = z.object({
     .partial()
     .nullish(),
 })
+
+export const StravaActivityTotalSchema = z.object({
+  count: z.number(),
+  distance: z.number(),
+  moving_time: z.number(),
+  elapsed_time: z.number(),
+  elevation_gain: z.number(),
+  achievement_count: z.number(),
+})
+
+export const StravaActivityStatsSchema = z.object({
+  recent_ride_totals: StravaActivityTotalSchema,
+  recent_run_totals: StravaActivityTotalSchema,
+  recent_swim_totals: StravaActivityTotalSchema,
+  ytd_ride_totals: StravaActivityTotalSchema,
+  ytd_run_totals: StravaActivityTotalSchema,
+  ytd_swim_totals: StravaActivityTotalSchema,
+  all_ride_totals: StravaActivityTotalSchema,
+  all_run_totals: StravaActivityTotalSchema,
+  all_swim_totals: StravaActivityTotalSchema,
+})
+
+export type StravaActivityTotal = z.infer<typeof StravaActivityTotalSchema>
+export type StravaActivityStats = z.infer<typeof StravaActivityStatsSchema>

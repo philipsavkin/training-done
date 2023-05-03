@@ -59,3 +59,19 @@ create table
     `total_photo_count` int,
     `has_kudoed` boolean
   );
+
+create table
+  ActivityStats (
+    `athlete_id` bigint not null,
+    -- period: recent, ytd, all
+    `period` varchar(10) not null,
+    -- activity_type: run, ride, swim
+    `activity_type` varchar(10) not null,
+    `count` int,
+    `distance` float,
+    `moving_time` int,
+    `elapsed_time` int,
+    `elevation_gain` float,
+    index (`athlete_id`),
+    unique key (`athlete_id`, `period`, `activity_type`)
+  );

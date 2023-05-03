@@ -1,10 +1,18 @@
 import config from '../app/mysql'
 import { connect } from '@planetscale/database'
 import { fromUnixTime, subMinutes, isAfter, formatDistance, getUnixTime } from 'date-fns'
-import { StravaActivitiesSchema, TokenResponseSchema } from './strava-schema'
+import {
+  StravaActivitiesSchema,
+  StravaActivitySchema,
+  StravaActivityStatsSchema,
+  TokenResponseSchema,
+} from './strava-schema'
 import type { TokenData } from './strava-schema'
 
 const API_BASE_URL = 'https://www.strava.com/api/v3'
+
+// NextJS App Router fetch caches data forever by default
+const API_FETCH_OPTIONS = { cache: 'no-store' } as const
 
 async function getAccessToken() {
   const conn = connect(config)
@@ -28,6 +36,7 @@ async function getAccessToken() {
       const response = await fetch(`${API_BASE_URL}/oauth/token`, {
         method: 'POST',
         body: formData,
+        ...API_FETCH_OPTIONS,
       })
       if (response.status !== 200) {
         console.error(`API returned status ${response.status}`)
@@ -57,6 +66,7 @@ export async function getProfileData() {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
+    ...API_FETCH_OPTIONS,
   })
 
   const json = await response.json()
@@ -71,8 +81,35 @@ export async function getActivities() {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
+    ...API_FETCH_OPTIONS,
   })
 
   const json = await response.json()
   return StravaActivitiesSchema.parse(json)
+}
+
+export async function getAthleteStats(athleteId: number) {
+  const accessToken = await getAccessToken()
+  const response = await fetch(`${API_BASE_URL}/athlete/${athleteId}/stats`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    ...API_FETCH_OPTIONS,
+  })
+
+  const json = await response.json()
+  return StravaActivityStatsSchema.parse(json)
+}
+
+export async function getActivity(activityId: number) {
+  const accessToken = await getAccessToken()
+  const response = await fetch(`${API_BASE_URL}/activities/${activityId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    ...API_FETCH_OPTIONS,
+  })
+
+  const json = await response.json()
+  return StravaActivitySchema.parse(json)
 }
