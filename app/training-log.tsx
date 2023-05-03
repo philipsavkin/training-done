@@ -6,7 +6,7 @@ import RunningIcon from '@/components/icons/running'
 import CyclingIcon from '@/components/icons/cycling'
 import SwimmingIcon from '@/components/icons/swimming'
 import type { ComponentType } from 'react'
-import type { DayOfWeek } from '@/lib/types'
+import type { ActivityExt, DayOfWeek } from '@/lib/types'
 
 type WeekSummaryProps = {
   weekTotals: WeekTotals
@@ -34,7 +34,7 @@ function WeekSummary({ weekTotals, Icon }: WeekSummaryProps) {
 type TrainingLogWeekProps = {
   startDate: Date
   endDate: Date
-  activities: Array<db.activity.Activity & { activityDate: Date; activityWeekDay: DayOfWeek }>
+  activities: ActivityExt[]
 }
 
 async function TrainingLogWeek(props: TrainingLogWeekProps) {
@@ -76,7 +76,7 @@ async function TrainingLogWeek(props: TrainingLogWeekProps) {
         return activity ? (
           <Activity key={activity.id} initialActivity={activity} />
         ) : (
-          <div key={day} className="inline-block w-32 text-center text-slate-400">
+          <div key={day} className="inline-block w-32 text-center text-stone-400">
             Rest
           </div>
         )
@@ -90,7 +90,7 @@ export async function TrainingLog() {
   const weekActivities = groupActivitiesByWeek(activities)
   return (
     <div>
-      <h2 className="m-8 text-2xl font-bold">Training log</h2>
+      <h2 className="m-8 text-2xl font-bold text-orange-600">Training log</h2>
       <header className="border-b-2 border-t-2 py-2">
         <div className="inline-block w-48 text-center">Week</div>
         <div className="inline-block w-32 text-center">Mon</div>
