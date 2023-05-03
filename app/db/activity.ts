@@ -1,14 +1,24 @@
 import config from '../mysql'
 import { connect } from '@planetscale/database'
-import { Activity } from '../strava-schema'
+import { StravaActivity } from '../strava-schema'
+import { ActivityGroup } from '@/lib/types'
+
+export type Activity = Omit<StravaActivity, 'athlete' | 'start_latlng' | 'end_latlng'> & {
+  athlete_id: number
+  start_lat: number
+  start_lng: number
+  end_lat: number
+  end_lng: number
+  group: ActivityGroup
+}
 
 export async function findAll(): Promise<Activity[]> {
   const conn = connect(config)
-  const results = await conn.execute('select * from Activities')
+  const results = await conn.execute('select * from Activities order by start_date desc')
   return results.rows.map((row) => row as Activity)
 }
 
-export async function create(activity: Activity) {
+export async function create(activity: StravaActivity) {
   const recordObj = {
     ...activity,
     athlete_id: activity.athlete.id,

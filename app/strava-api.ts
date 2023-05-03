@@ -1,32 +1,19 @@
 import config from './mysql'
 import { connect } from '@planetscale/database'
-import {
-  fromUnixTime,
-  subMinutes,
-  isAfter,
-  formatDistance,
-  getUnixTime,
-} from 'date-fns'
-import { ActivitiesSchema, TokenResponseSchema } from './strava-schema'
+import { fromUnixTime, subMinutes, isAfter, formatDistance, getUnixTime } from 'date-fns'
+import { StravaActivitiesSchema, TokenResponseSchema } from './strava-schema'
 import type { TokenData } from './strava-schema'
 
 const API_BASE_URL = 'https://www.strava.com/api/v3'
 
 async function getAccessToken() {
   const conn = connect(config)
-  const results = await conn.execute(
-    'select * from StravaTokens order by created_at desc limit 1',
-  )
+  const results = await conn.execute('select * from StravaTokens order by created_at desc limit 1')
   const token = results.rows[0] as TokenData
   const tokenExpireDate = fromUnixTime(token.expires_at)
 
   if (isAfter(subMinutes(tokenExpireDate, 30), new Date())) {
-    console.log(
-      `Using existing token, token valid for ${formatDistance(
-        tokenExpireDate,
-        new Date(),
-      )}`,
-    )
+    console.log(`Using existing token, token valid for ${formatDistance(tokenExpireDate, new Date())}`)
     return token.access_token
   } else {
     console.log(`Requesting new token`)
@@ -80,15 +67,12 @@ export async function getActivities() {
   const accessToken = await getAccessToken()
   const before = getUnixTime(new Date())
 
-  const response = await fetch(
-    `${API_BASE_URL}/athlete/activities?before=${before}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+  const response = await fetch(`${API_BASE_URL}/athlete/activities?before=${before}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
-  )
+  })
 
   const json = await response.json()
-  return ActivitiesSchema.parse(json)
+  return StravaActivitiesSchema.parse(json)
 }

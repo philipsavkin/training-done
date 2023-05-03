@@ -8,7 +8,7 @@ export const TokenResponseSchema = z.object({
 
 export type TokenData = z.infer<typeof TokenResponseSchema>
 
-export const ActivitySchema = z.object({
+export const StravaActivitySchema = z.object({
   resource_state: z.number(),
   athlete: z.object({ id: z.number(), resource_state: z.number() }),
   name: z.string(),
@@ -64,6 +64,6 @@ export const ActivitySchema = z.object({
   has_kudoed: z.boolean(),
 })
 
-export const ActivitiesSchema = z.array(ActivitySchema)
+export const StravaActivitiesSchema = z.array(StravaActivitySchema)
 
-export type Activity = z.infer<typeof ActivitySchema>
+export type StravaActivity = z.infer<typeof StravaActivitySchema>
