@@ -28,9 +28,7 @@ export function Activity({ initialActivity: activity }: ActivityProps) {
   }
 
   return (
-    <div
-      className={`${activityBgColor} ${activityBorderColor} my-1 inline-block w-32 overflow-hidden rounded-lg border-2 p-1 text-center`}
-    >
+    <div className={`${activityBgColor} ${activityBorderColor} my-1 overflow-hidden rounded-lg border-2 p-1`}>
       <div>{formatDistance(activity.distance)}</div>
       <div>{formatDuration(activity.elapsed_time)}</div>
     </div>

@@ -6,7 +6,8 @@ import RunningIcon from '@/components/icons/running'
 import CyclingIcon from '@/components/icons/cycling'
 import SwimmingIcon from '@/components/icons/swimming'
 import type { ComponentType } from 'react'
-import type { ActivityExt, DayOfWeek } from '@/lib/types'
+import type { ActivityExt } from '@/lib/types'
+import { PropsWithChildren } from 'react'
 
 type WeekSummaryProps = {
   weekTotals: WeekTotals
@@ -31,13 +32,17 @@ function WeekSummary({ weekTotals, Icon }: WeekSummaryProps) {
   )
 }
 
+function LogGridItem({ children }: PropsWithChildren) {
+  return <div className="self-stretch border-b-2 p-4 text-center">{children}</div>
+}
+
 type TrainingLogWeekProps = {
   startDate: Date
   endDate: Date
   activities: ActivityExt[]
 }
 
-async function TrainingLogWeek(props: TrainingLogWeekProps) {
+function TrainingLogWeek(props: TrainingLogWeekProps) {
   const weekTotals: WeekTotals = { distance: 0, duration: 0 }
   const runTotals: WeekTotals = { distance: 0, duration: 0 }
   const rideTotals: WeekTotals = { distance: 0, duration: 0 }
@@ -59,8 +64,8 @@ async function TrainingLogWeek(props: TrainingLogWeekProps) {
   }
 
   return (
-    <section className="my-1 flex border-b-2 p-1">
-      <div className="inline-block w-48 text-center">
+    <>
+      <LogGridItem>
         <div className="font-bold">{`${format(props.startDate, 'MMM d')}-${format(props.endDate, 'MMM d')}`}</div>
         <div className="mb-2">
           <span className="mr-2 text-sm">{formatDistance(weekTotals.distance)}</span>
@@ -69,19 +74,21 @@ async function TrainingLogWeek(props: TrainingLogWeekProps) {
         <WeekSummary Icon={RunningIcon} weekTotals={runTotals} />
         <WeekSummary Icon={CyclingIcon} weekTotals={rideTotals} />
         <WeekSummary Icon={SwimmingIcon} weekTotals={swimTotals} />
-      </div>
+      </LogGridItem>
 
       {[0, 1, 2, 3, 4, 5, 6].map((day) => {
         const activity = props.activities.find((activity) => activity.activityWeekDay === day)
         return activity ? (
-          <Activity key={activity.id} initialActivity={activity} />
+          <LogGridItem key={activity.id}>
+            <Activity initialActivity={activity} />
+          </LogGridItem>
         ) : (
-          <div key={day} className="inline-block w-32 text-center text-stone-400">
-            Rest
-          </div>
+          <LogGridItem key={day}>
+            <div className="text-stone-400">Rest</div>
+          </LogGridItem>
         )
       })}
-    </section>
+    </>
   )
 }
 
@@ -91,20 +98,19 @@ export async function TrainingLog() {
   return (
     <div>
       <h2 className="m-8 text-2xl font-bold text-orange-600">Training log</h2>
-      <header className="border-b-2 border-t-2 py-2">
-        <div className="inline-block w-48 text-center">Week</div>
-        <div className="inline-block w-32 text-center">Mon</div>
-        <div className="inline-block w-32 text-center">Tue</div>
-        <div className="inline-block w-32 text-center">Wed</div>
-        <div className="inline-block w-32 text-center">Thu</div>
-        <div className="inline-block w-32 text-center">Fri</div>
-        <div className="inline-block w-32 text-center">Sat</div>
-        <div className="inline-block w-32 text-center">Sun</div>
-      </header>
-      {weekActivities.map((weekProps, i) => {
-        // @ts-expect-error Async Server Component
-        return <TrainingLogWeek key={i} {...weekProps} />
-      })}
+      <div className="align-items grid grid-cols-8 items-center">
+        <div className="border-b-2 border-t-2 py-2 text-center">Week</div>
+        <div className="border-b-2 border-t-2 py-2 text-center">Mon</div>
+        <div className="border-b-2 border-t-2 py-2 text-center">Tue</div>
+        <div className="border-b-2 border-t-2 py-2 text-center">Wed</div>
+        <div className="border-b-2 border-t-2 py-2 text-center">Thu</div>
+        <div className="border-b-2 border-t-2 py-2 text-center">Fri</div>
+        <div className="border-b-2 border-t-2 py-2 text-center">Sat</div>
+        <div className="border-b-2 border-t-2 py-2 text-center">Sun</div>
+        {weekActivities.map((weekProps, i) => (
+          <TrainingLogWeek key={i} {...weekProps} />
+        ))}
+      </div>
     </div>
   )
 }
