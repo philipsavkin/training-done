@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   console.log('webhook event received, successfully parsed!', data)
   if (data.object_type === 'activity' && data.aspect_type === 'create') {
     // no await, respond immediately
-    fetchActivityAndStats(data.object_id)
+    await fetchActivityAndStats(data.object_id)
   }
   return new Response('EVENT_RECEIVED')
 }
@@ -46,7 +46,9 @@ export async function GET(request: Request) {
 
 async function fetchActivityAndStats(activityId: number) {
   const activity = await getActivity(activityId)
+  console.log(`Activity fetched from strava ${activity.name}}`)
   await db.activity.create(activity)
   const stats = await getAthleteStats(activity.athlete.id)
+  console.log(`Stats fetched from Strava`)
   await db.activityStats.create(activity.athlete.id, stats)
 }
