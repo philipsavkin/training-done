@@ -1,5 +1,5 @@
-import { secondsToHours, secondsToMinutes } from 'date-fns'
-import { ActivityGroup } from './types'
+import { secondsToHours, secondsToMinutes, getDay } from 'date-fns'
+import type { ActivityGroup, DayOfWeek } from './types'
 
 export function formatDistance(distance: number) {
   return `${(distance / 1000).toFixed(1)} km`
@@ -27,4 +27,12 @@ export function getActivityGroup(activityType: string): ActivityGroup {
   } else {
     return 'Other'
   }
+}
+
+/**
+ * Returns day of week as 0-6, starting from Monday
+ */
+export function getDayOfWeek(date: Date) {
+  const d = getDay(date)
+  return (d === 0 ? 6 : d - 1) as DayOfWeek
 }

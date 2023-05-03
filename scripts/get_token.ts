@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { TokenResponseSchema } from '../app/strava-schema'
+import { TokenResponseSchema } from '../lib/strava-schema'
 import config from '../app/mysql'
 import { connect } from '@planetscale/database'
 
@@ -25,10 +25,7 @@ async function main() {
     }
     const json = await response.json()
     if (json.errors) {
-      return console.error(
-        'Failed to fetch a new access token from Strava',
-        json,
-      )
+      return console.error('Failed to fetch a new access token from Strava', json)
     }
 
     const tokenData = TokenResponseSchema.parse(json)

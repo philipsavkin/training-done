@@ -1,4 +1,4 @@
-import config from './mysql'
+import config from '../app/mysql'
 import { connect } from '@planetscale/database'
 import { fromUnixTime, subMinutes, isAfter, formatDistance, getUnixTime } from 'date-fns'
 import { StravaActivitiesSchema, TokenResponseSchema } from './strava-schema'

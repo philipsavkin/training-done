@@ -1,12 +1,12 @@
 import { Activity } from './activity'
-import { format, parse, getWeek, startOfWeek, endOfWeek, getDay } from 'date-fns'
+import { format, parse, getWeek, startOfWeek, endOfWeek } from 'date-fns'
 import * as db from './db'
-import { formatDistance, formatDuration, getActivityGroup } from '../lib/util'
+import { formatDistance, formatDuration, getActivityGroup, getDayOfWeek } from '../lib/util'
 import RunningIcon from '@/components/icons/running'
 import CyclingIcon from '@/components/icons/cycling'
 import SwimmingIcon from '@/components/icons/swimming'
-import { ComponentType } from 'react'
-import { ActivityGroup } from '@/lib/types'
+import type { ComponentType } from 'react'
+import type { DayOfWeek } from '@/lib/types'
 
 type WeekSummaryProps = {
   weekTotals: WeekTotals
@@ -140,13 +140,4 @@ function groupActivitiesByWeek(activities: db.activity.Activity[]): TrainingLogW
   }
 
   return weekProps
-}
-
-/**
- * Returns day of week as 0-6, starting from Monday
- */
-type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6
-function getDayOfWeek(date: Date) {
-  const d = getDay(date)
-  return (d === 0 ? 6 : d - 1) as DayOfWeek
 }

@@ -1,4 +1,4 @@
-import { getActivities } from '@/app/strava-api'
+import { getActivities } from '@/lib/strava-api'
 import * as db from '@/app/db'
 import 'dotenv/config'
 

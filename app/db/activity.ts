@@ -1,6 +1,6 @@
 import config from '../mysql'
 import { connect } from '@planetscale/database'
-import { StravaActivity } from '../strava-schema'
+import { StravaActivity } from '../../lib/strava-schema'
 import { ActivityGroup } from '@/lib/types'
 
 export type Activity = Omit<StravaActivity, 'athlete' | 'start_latlng' | 'end_latlng'> & {
