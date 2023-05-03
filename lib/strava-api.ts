@@ -90,7 +90,7 @@ export async function getActivities() {
 
 export async function getAthleteStats(athleteId: number) {
   const accessToken = await getAccessToken()
-  const response = await fetch(`${API_BASE_URL}/athlete/${athleteId}/stats`, {
+  const response = await fetch(`${API_BASE_URL}/athletes/${athleteId}/stats`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

@@ -61,9 +61,6 @@ export async function create(activity: StravaActivity) {
     `start_date_local`, \
     `timezone`, \
     `utc_offset`, \
-    `location_city`, \
-    `location_state`, \
-    `location_country`, \
     `achievement_count`, \
     `kudos_count`, \
     `comment_count`, \
@@ -111,9 +108,6 @@ export async function create(activity: StravaActivity) {
     :start_date_local, \
     :timezone, \
     :utc_offset, \
-    :location_city, \
-    :location_state, \
-    :location_country, \
     :achievement_count, \
     :kudos_count, \
     :comment_count, \

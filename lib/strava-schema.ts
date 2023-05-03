@@ -23,9 +23,6 @@ export const StravaActivitySchema = z.object({
   start_date_local: z.string(),
   timezone: z.string(),
   utc_offset: z.number(),
-  location_city: z.string().nullable(),
-  location_state: z.string().nullable(),
-  location_country: z.string().nullable(),
   achievement_count: z.number(),
   kudos_count: z.number(),
   comment_count: z.number(),
@@ -92,7 +89,6 @@ export const StravaActivityTotalSchema = z.object({
   moving_time: z.number(),
   elapsed_time: z.number(),
   elevation_gain: z.number(),
-  achievement_count: z.number(),
 })
 
 export const StravaActivityStatsSchema = z.object({

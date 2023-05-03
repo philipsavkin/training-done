@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
   const { data } = parseResult
   console.log('webhook event received, successfully parsed!', data)
-  if (data.object_type === 'activity') {
+  if (data.object_type === 'activity' && data.aspect_type === 'create') {
     // no await, respond immediately
     fetchActivityAndStats(data.object_id)
   }
