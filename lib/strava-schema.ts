@@ -70,10 +70,10 @@ export type StravaActivity = z.infer<typeof StravaActivitySchema>
 
 export const StravaWebhookDataSchema = z.object({
   aspect_type: z.union([z.literal('create'), z.literal('update'), z.literal('delete')]),
-  event_time: z.bigint(),
-  object_id: z.bigint(),
+  event_time: z.number(),
+  object_id: z.number(),
   object_type: z.union([z.literal('activity'), z.literal('athlete')]),
-  owner_id: z.bigint(),
+  owner_id: z.number(),
   subscription_id: z.number(),
   updates: z
     .object({
