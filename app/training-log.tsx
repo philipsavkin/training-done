@@ -45,16 +45,16 @@ async function TrainingLogWeek(props: TrainingLogWeekProps) {
 
   for (const activity of props.activities) {
     weekTotals.distance += activity.distance
-    weekTotals.duration += activity.moving_time
+    weekTotals.duration += activity.elapsed_time
     if (activity.group === 'Run') {
       runTotals.distance += activity.distance
-      runTotals.duration += activity.moving_time
+      runTotals.duration += activity.elapsed_time
     } else if (activity.group === 'Ride') {
       rideTotals.distance += activity.distance
-      rideTotals.duration += activity.moving_time
+      rideTotals.duration += activity.elapsed_time
     } else if (activity.group === 'Swim') {
       swimTotals.distance += activity.distance
-      swimTotals.duration += activity.moving_time
+      swimTotals.duration += activity.elapsed_time
     }
   }
 
