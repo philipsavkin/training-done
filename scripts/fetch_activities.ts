@@ -1,5 +1,5 @@
 import { getActivities } from '@/lib/strava-api'
-import * as db from '@/app/db'
+import * as db from '@/database'
 import 'dotenv/config'
 
 async function main() {

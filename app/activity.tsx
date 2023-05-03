@@ -1,4 +1,4 @@
-import * as db from './db'
+import * as db from '../database'
 import { formatDistance } from '../lib/util'
 
 type ActivityProps = {

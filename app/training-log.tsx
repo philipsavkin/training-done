@@ -1,6 +1,6 @@
 import { Activity } from './activity'
 import { format, parse, getWeek, startOfWeek, endOfWeek } from 'date-fns'
-import * as db from './db'
+import * as db from '../database'
 import { formatDistance, formatDuration, getActivityGroup, getDayOfWeek } from '../lib/util'
 import RunningIcon from '@/components/icons/running'
 import CyclingIcon from '@/components/icons/cycling'
