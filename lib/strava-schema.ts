@@ -67,3 +67,21 @@ export const StravaActivitySchema = z.object({
 export const StravaActivitiesSchema = z.array(StravaActivitySchema)
 
 export type StravaActivity = z.infer<typeof StravaActivitySchema>
+
+export const StravaWebhookDataSchema = z.object({
+  aspect_type: z.union([z.literal('create'), z.literal('update'), z.literal('delete')]),
+  event_time: z.bigint(),
+  object_id: z.bigint(),
+  object_type: z.union([z.literal('activity'), z.literal('athlete')]),
+  owner_id: z.bigint(),
+  subscription_id: z.number(),
+  updates: z
+    .object({
+      title: z.string(),
+      type: z.string(),
+      private: z.union([z.string(), z.boolean()]),
+      authorized: z.union([z.string(), z.boolean()]),
+    })
+    .partial()
+    .nullish(),
+})

@@ -1,8 +1,15 @@
+import { StravaWebhookDataSchema } from '@/lib/strava-schema'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   const json = await request.json()
-  console.log('webhook event received!', json)
+  const parseResult = StravaWebhookDataSchema.safeParse(json)
+  if (!parseResult.success) {
+    console.log('webhook event received, parsing failed', parseResult.error)
+    return new Response('EVENT_RECEIVED')
+  }
+
+  console.log('webhook event received, successfully parsed!', parseResult.data)
   return new Response('EVENT_RECEIVED')
 }
 
