@@ -1,10 +1,22 @@
 create table
   StravaTokens (
-    token_id int not null auto_increment primary key,
-    access_token varchar(100) not null,
-    expires_at int not null,
-    refresh_token varchar(100) not null,
-    created_at timestamp not null default now ()
+    `athlete_id` bigint not null primary key,
+    `access_token` varchar(100) not null,
+    `expires_at` int not null,
+    `refresh_token` varchar(100) not null,
+    `created_at` timestamp not null default now ()
+  );
+
+create table
+  Athlete (
+    `athlete_id` bigint not null primary key,
+    `username` varchar(100),
+    `resource_state` tinyint,
+    `firstname` varchar(100),
+    `lastname` varchar(100),
+    `premium` boolean,
+    `profile_medium` varchar(300),
+    `profile` varchar(300)
   );
 
 create table
@@ -13,7 +25,7 @@ create table
     `external_id` varchar(200),
     `resource_state` tinyint,
     `athlete_id` bigint,
-    `name` varchar(500),
+    `name` varchar(200),
     `distance` float,
     `moving_time` int,
     `elapsed_time` int,
@@ -54,7 +66,8 @@ create table
     `from_accepted_tag` boolean,
     `pr_count` int,
     `total_photo_count` int,
-    `has_kudoed` boolean
+    `has_kudoed` boolean,
+    index (`athlete_id`),
   );
 
 create table

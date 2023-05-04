@@ -3,7 +3,7 @@ import * as db from '@/database'
 import 'dotenv/config'
 
 async function main() {
-  const activities = await getActivities()
+  const activities = await getActivities(66213390)
   for (const activity of activities) {
     await db.activity.create(activity)
     console.log(`Activity ${activity.id} added to DB`)

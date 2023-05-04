@@ -105,3 +105,22 @@ export const StravaActivityStatsSchema = z.object({
 
 export type StravaActivityTotal = z.infer<typeof StravaActivityTotalSchema>
 export type StravaActivityStats = z.infer<typeof StravaActivityStatsSchema>
+
+export const StravaAthleteSchema = z.object({
+  id: z.number(),
+  username: z.string(),
+  resource_state: z.number().nullable(),
+  firstname: z.string().nullable(),
+  lastname: z.string().nullable(),
+  premium: z.boolean().nullable(),
+  profile_medium: z.string().nullable(),
+  profile: z.string().nullable(),
+})
+
+export type StravaAthlete = z.infer<typeof StravaAthleteSchema>
+
+export const StravaAccountSchema = TokenResponseSchema.extend({
+  athlete: StravaAthleteSchema,
+})
+
+export type StravaAccount = z.infer<typeof StravaAccountSchema>

@@ -1,5 +1,4 @@
-import config from '../app/mysql'
-import { connect } from '@planetscale/database'
+import * as db from '../database'
 import { fromUnixTime, subMinutes, isAfter, formatDistance, getUnixTime } from 'date-fns'
 import {
   StravaActivitiesSchema,
@@ -7,17 +6,14 @@ import {
   StravaActivityStatsSchema,
   TokenResponseSchema,
 } from './strava-schema'
-import type { TokenData } from './strava-schema'
 
 const API_BASE_URL = 'https://www.strava.com/api/v3'
 
 // NextJS App Router fetch caches data forever by default
 const API_FETCH_OPTIONS = { cache: 'no-store' } as const
 
-async function getAccessToken() {
-  const conn = connect(config)
-  const results = await conn.execute('select * from StravaTokens order by created_at desc limit 1')
-  const token = results.rows[0] as TokenData
+async function getAccessToken(athleteId: number) {
+  const token = await db.token.findByAthleteId(athleteId)
   const tokenExpireDate = fromUnixTime(token.expires_at)
 
   if (isAfter(subMinutes(tokenExpireDate, 30), new Date())) {
@@ -47,10 +43,7 @@ async function getAccessToken() {
       }
 
       const newTokenData = TokenResponseSchema.parse(json)
-      await conn.execute(
-        'insert into StravaTokens (`access_token`, `refresh_token`, `expires_at`) values (:access_token, :refresh_token, :expires_at)',
-        newTokenData,
-      )
+      await db.token.create(athleteId, newTokenData)
       return newTokenData.access_token
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
@@ -60,8 +53,8 @@ async function getAccessToken() {
   }
 }
 
-export async function getProfileData() {
-  const accessToken = await getAccessToken()
+export async function getProfileData(athleteId: number) {
+  const accessToken = await getAccessToken(athleteId)
   const response = await fetch(`${API_BASE_URL}/athlete`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -73,8 +66,8 @@ export async function getProfileData() {
   return json
 }
 
-export async function getActivities() {
-  const accessToken = await getAccessToken()
+export async function getActivities(athleteId: number) {
+  const accessToken = await getAccessToken(athleteId)
   const before = getUnixTime(new Date())
 
   const response = await fetch(`${API_BASE_URL}/athlete/activities?before=${before}`, {
@@ -89,7 +82,7 @@ export async function getActivities() {
 }
 
 export async function getAthleteStats(athleteId: number) {
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessToken(athleteId)
   const response = await fetch(`${API_BASE_URL}/athletes/${athleteId}/stats`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -101,8 +94,8 @@ export async function getAthleteStats(athleteId: number) {
   return StravaActivityStatsSchema.parse(json)
 }
 
-export async function getActivity(activityId: number) {
-  const accessToken = await getAccessToken()
+export async function getActivity(activityId: number, athleteId: number) {
+  const accessToken = await getAccessToken(athleteId)
   const response = await fetch(`${API_BASE_URL}/activities/${activityId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
