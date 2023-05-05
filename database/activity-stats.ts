@@ -1,5 +1,5 @@
 import type { StravaActivityStats, StravaActivityTotal } from '@/lib/strava-schema'
-import config from '../app/mysql'
+import config from './mysql'
 import { connect } from '@planetscale/database'
 
 type ActivityStats = {

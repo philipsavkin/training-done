@@ -1,4 +1,4 @@
-import { Activity } from './activity'
+import { Activity } from '../app/activity'
 import { format, parse, getWeek, startOfWeek, endOfWeek } from 'date-fns'
 import * as db from '../database'
 import { formatDistance, formatDuration, getActivityGroup, getDayOfWeek } from '../lib/util'
@@ -8,6 +8,7 @@ import SwimmingIcon from '@/components/icons/swimming'
 import type { ComponentType } from 'react'
 import type { ActivityExt } from '@/lib/types'
 import { PropsWithChildren } from 'react'
+import Header from './header'
 
 type WeekSummaryProps = {
   weekTotals: WeekTotals
@@ -96,8 +97,9 @@ export async function TrainingLog() {
   const activities = await db.activity.findAll()
   const weekActivities = groupActivitiesByWeek(activities)
   return (
-    <div>
-      <h2 className="m-8 text-2xl font-bold text-orange-600">Training log</h2>
+    <main className="container mx-auto p-24 pt-4">
+      {/* @ts-expect-error Async Server Component */}
+      <Header />
       <div className="align-items grid grid-cols-8 items-center">
         <div className="border-b-2 border-t-2 py-2 text-center">Week</div>
         <div className="border-b-2 border-t-2 py-2 text-center">Mon</div>
@@ -111,7 +113,7 @@ export async function TrainingLog() {
           <TrainingLogWeek key={i} {...weekProps} />
         ))}
       </div>
-    </div>
+    </main>
   )
 }
 

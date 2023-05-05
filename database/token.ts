@@ -1,4 +1,4 @@
-import config from '../app/mysql'
+import config from './mysql'
 import { connect } from '@planetscale/database'
 import type { TokenData } from '../lib/strava-schema'
 

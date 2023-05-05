@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { TokenResponseSchema } from '../lib/strava-schema'
-import config from '../app/mysql'
+import config from '../database/mysql'
 import { connect } from '@planetscale/database'
 
 const code = '24b916b645d3290200077fda5013d2ac55773a6f'

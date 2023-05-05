@@ -53,19 +53,6 @@ async function getAccessToken(athleteId: number) {
   }
 }
 
-export async function getProfileData(athleteId: number) {
-  const accessToken = await getAccessToken(athleteId)
-  const response = await fetch(`${API_BASE_URL}/athlete`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    ...API_FETCH_OPTIONS,
-  })
-
-  const json = await response.json()
-  return json
-}
-
 export async function getActivities(athleteId: number) {
   const accessToken = await getAccessToken(athleteId)
   const before = getUnixTime(new Date())

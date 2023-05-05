@@ -1,4 +1,4 @@
-import config from '../app/mysql'
+import config from './mysql'
 import { connect } from '@planetscale/database'
 import { StravaActivity } from '../lib/strava-schema'
 import { ActivityGroup } from '@/lib/types'

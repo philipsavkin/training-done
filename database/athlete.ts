@@ -1,6 +1,12 @@
-import config from '../app/mysql'
+import config from './mysql'
 import { connect } from '@planetscale/database'
 import type { StravaAthlete } from '../lib/strava-schema'
+
+export async function findById(athleteId: number) {
+  const conn = connect(config)
+  const results = await conn.execute('select * from Athlete where athlete_id = ?', [athleteId])
+  return results.rows[0] as StravaAthlete
+}
 
 export async function create(athlete: StravaAthlete) {
   const insertSql =
