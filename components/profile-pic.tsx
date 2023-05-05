@@ -19,7 +19,7 @@ export default function ProfilePic(props: ProfilePicProps) {
       />
       <nav
         tabIndex={1}
-        className="invisible absolute right-0 top-full w-40 rounded  border border-stone-700 bg-white text-sm opacity-0 drop-shadow-xl transition-all group-focus-within:visible group-focus-within:translate-y-1 group-focus-within:opacity-100"
+        className="invisible absolute right-0 top-full w-40 rounded  border border-stone-400 bg-white text-sm opacity-0 drop-shadow-xl transition-all group-focus-within:visible group-focus-within:translate-y-1 group-focus-within:opacity-100"
       >
         <div className="truncate border-b-2 px-4 py-3 font-medium">{`${props.firstname} ${props.lastname}`}</div>
         <ul className="py-1">

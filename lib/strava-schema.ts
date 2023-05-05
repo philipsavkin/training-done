@@ -17,7 +17,7 @@ export const StravaActivitySchema = z.object({
   elapsed_time: z.number(),
   total_elevation_gain: z.number().nullish(),
   sport_type: z.string(),
-  workout_type: z.number().nullable(),
+  workout_type: z.number().nullish(),
   id: z.number(),
   start_date: z.string(),
   start_date_local: z.string(),

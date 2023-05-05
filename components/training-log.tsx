@@ -93,8 +93,12 @@ function TrainingLogWeek(props: TrainingLogWeekProps) {
   )
 }
 
-export async function TrainingLog() {
-  const activities = await db.activity.findAll()
+export type TrainingLogProps = {
+  athleteId: number
+}
+
+export async function TrainingLog({ athleteId }: TrainingLogProps) {
+  const activities = await db.activity.findByAthleteId(athleteId)
   const weekActivities = groupActivitiesByWeek(activities)
   return (
     <main className="container mx-auto p-24 pt-4">

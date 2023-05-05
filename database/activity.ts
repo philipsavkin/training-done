@@ -1,5 +1,6 @@
 import config from './mysql'
 import { connect } from '@planetscale/database'
+import { parse, getUnixTime } from 'date-fns'
 import { StravaActivity } from '../lib/strava-schema'
 import { ActivityGroup } from '@/lib/types'
 
@@ -12,10 +13,27 @@ export type Activity = Omit<StravaActivity, 'athlete' | 'start_latlng' | 'end_la
   group: ActivityGroup
 }
 
-export async function findAll(): Promise<Activity[]> {
+export async function findByAthleteId(athleteId: number): Promise<Activity[]> {
   const conn = connect(config)
-  const results = await conn.execute('select * from Activities order by start_date desc')
+  const results = await conn.execute('select * from Activities where athlete_id = ? order by start_date desc', [
+    athleteId,
+  ])
   return results.rows.map((row) => row as Activity)
+}
+
+export async function findLastActivityTimestamp(athleteId: number): Promise<number | undefined> {
+  const conn = connect(config)
+  const results = await conn.execute('select max(start_date) as max_start_date from Activities where athlete_id = ?', [
+    athleteId,
+  ])
+  const row = results.rows[0] as Record<string, any>
+  const lastStartDate = row?.max_start_date as string
+  if (!lastStartDate) {
+    return undefined
+  }
+
+  const parsedDate = parse(lastStartDate, 'yyyy-MM-dd HH:mm:ss', new Date())
+  return getUnixTime(parsedDate)
 }
 
 export async function create(activity: StravaActivity) {
@@ -29,6 +47,7 @@ export async function create(activity: StravaActivity) {
     start_date: activity.start_date.replace('T', ' ').replace('Z', ''),
     start_date_local: activity.start_date_local.replace('T', ' ').replace('Z', ''),
 
+    workout_type: activity.workout_type || null,
     total_elevation_gain: activity.total_elevation_gain || null,
     average_speed: activity.average_speed || null,
     max_speed: activity.max_speed || null,
@@ -41,7 +60,7 @@ export async function create(activity: StravaActivity) {
   }
 
   const insertSql =
-    'insert into Activities( \
+    'insert ignore into Activities( \
     `id`, \
     `external_id` , \
     `resource_state`, \

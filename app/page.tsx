@@ -6,5 +6,5 @@ import { Landing } from '../components/landing'
 export default async function Home() {
   const session = await getServerSession(authOptions)
   /* @ts-expect-error Async Server Component */
-  return session ? <TrainingLog /> : <Landing />
+  return session ? <TrainingLog athleteId={session.userId} /> : <Landing />
 }

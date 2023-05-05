@@ -53,11 +53,12 @@ async function getAccessToken(athleteId: number) {
   }
 }
 
-export async function getActivities(athleteId: number) {
+export async function getActivities(athleteId: number, after?: number | undefined) {
   const accessToken = await getAccessToken(athleteId)
   const before = getUnixTime(new Date())
 
-  const response = await fetch(`${API_BASE_URL}/athlete/activities?before=${before}`, {
+  const afterQueryParam = after ? `&after=${after + 60}` : ''
+  const response = await fetch(`${API_BASE_URL}/athlete/activities?before=${before}&per_page=60${afterQueryParam}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
