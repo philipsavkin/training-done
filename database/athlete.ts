@@ -5,6 +5,9 @@ import type { StravaAthlete } from '../lib/strava-schema'
 export async function findById(athleteId: number) {
   const conn = connect(config)
   const results = await conn.execute('select * from Athlete where athlete_id = ?', [athleteId])
+  if (results.rows.length === 0) {
+    return null
+  }
   return results.rows[0] as StravaAthlete
 }
 
