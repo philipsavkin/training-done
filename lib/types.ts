@@ -9,3 +9,9 @@ export type ActivityExt = db.activity.Activity & {
   activityWeekDay: DayOfWeek
   group: ActivityGroup
 }
+
+export type Settings = {
+  athlete_id: number
+  slug: string
+  share: boolean
+}

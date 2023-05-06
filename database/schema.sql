@@ -85,3 +85,10 @@ create table
     index (`athlete_id`),
     unique key (`athlete_id`, `period`, `activity_type`)
   );
+
+create table
+  Settings (
+    `athlete_id` bigint not null unique,
+    `slug` varchar(100),
+    `share` boolean
+  )
