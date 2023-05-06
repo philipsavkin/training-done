@@ -1,10 +1,20 @@
 'use client'
+
+import Link from 'next/link'
 import { signIn } from 'next-auth/react'
 
 export function Landing() {
   return (
     <main className="min-h-screen p-24 pt-4">
       <h2>Landing</h2>
+      <section>
+        Our website creates training logs and stats based on user&apos;s activities from Strava. We collect personal
+        information like your name and activity data from Strava, but we will never share it with third parties or use
+        it for any other purpose. See details in our{' '}
+        <Link href="/privacy" className="font-bold underline">
+          Privacy Policy
+        </Link>
+      </section>
       <button
         onClick={() => signIn('strava', undefined, { scope: 'activity:read_all' })}
         type="button"
