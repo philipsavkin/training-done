@@ -1,6 +1,6 @@
 import { getActivity, getAthleteStats } from '@/lib/strava-api'
 import * as db from '../../database'
-import { StravaWebhookDataSchema } from '@/lib/strava-schema'
+import { StravaWebhookDataSchema, type StravaWebhookData } from '@/lib/strava-schema'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -12,10 +12,14 @@ export async function POST(request: Request) {
   }
 
   const { data } = parseResult
-  console.log('webhook event received, successfully parsed!', data)
-  if (data.object_type === 'activity' && data.aspect_type === 'create') {
-    // no await, respond immediately
-    await fetchActivityAndStats(data.object_id, data.owner_id)
+  if (data.object_type === 'activity') {
+    if (data.aspect_type === 'create') {
+      await fetchActivityAndStats(data.object_id, data.owner_id)
+    } else if (data.aspect_type === 'update') {
+      await updateActivity(data.object_id, data.owner_id, data.updates)
+    } else if (data.aspect_type === 'delete') {
+      await deleteActivity(data.object_id, data.owner_id)
+    }
   }
   return new Response('EVENT_RECEIVED')
 }
@@ -51,4 +55,16 @@ async function fetchActivityAndStats(activityId: number, athleteId: number) {
   const stats = await getAthleteStats(activity.athlete.id)
   console.log(`Stats fetched from Strava`)
   await db.activityStats.create(activity.athlete.id, stats)
+}
+
+async function updateActivity(activityId: number, athleteId: number, updates: StravaWebhookData['updates']) {
+  if (updates?.title) {
+    await db.activity.updateTitle(activityId, updates?.title)
+  }
+}
+
+async function deleteActivity(activityId: number, athleteId: number) {
+  await db.activity.deleteById(activityId)
+  const stats = await getAthleteStats(athleteId)
+  await db.activityStats.create(athleteId, stats)
 }

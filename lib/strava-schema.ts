@@ -83,6 +83,8 @@ export const StravaWebhookDataSchema = z.object({
     .nullish(),
 })
 
+export type StravaWebhookData = z.infer<typeof StravaWebhookDataSchema>
+
 export const StravaActivityTotalSchema = z.object({
   count: z.number(),
   distance: z.number(),

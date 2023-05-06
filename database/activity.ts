@@ -158,3 +158,13 @@ export async function create(activity: StravaActivity) {
   const conn = connect(config)
   await conn.execute(insertSql, recordObj)
 }
+
+export async function deleteById(activityId: number) {
+  const conn = connect(config)
+  await conn.execute('delete from Activities where `id` = ?', [activityId])
+}
+
+export async function updateTitle(activityId: number, title: string) {
+  const conn = connect(config)
+  await conn.execute('update Activities set `name` = ? where `id` = ?', [title, activityId])
+}
