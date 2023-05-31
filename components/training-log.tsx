@@ -78,10 +78,13 @@ function TrainingLogWeek(props: TrainingLogWeekProps) {
       </LogGridItem>
 
       {[0, 1, 2, 3, 4, 5, 6].map((day) => {
-        const activity = props.activities.find((activity) => activity.activityWeekDay === day)
-        return activity ? (
-          <LogGridItem key={activity.id}>
-            <Activity initialActivity={activity} />
+        const activities = props.activities.filter((activity) => activity.activityWeekDay === day)
+        activities.sort((a, b) => a.activityDate.getTime() - b.activityDate.getTime())
+        return activities.length > 0 ? (
+          <LogGridItem key={activities[0].id}>
+            {activities.map((activity) => (
+              <Activity key={activity.id} initialActivity={activity} />
+            ))}
           </LogGridItem>
         ) : (
           <LogGridItem key={day}>
