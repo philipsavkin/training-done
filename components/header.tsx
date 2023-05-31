@@ -15,7 +15,7 @@ export default async function Header() {
     <header className="flex justify-between p-4">
       <section className="flex gap-4">
         <div className="h-12 w-12 border-4 border-black ">Logo</div>
-        <h2 className="text-2xl font-bold text-orange-600">Training log</h2>
+        <h2 className="text-2xl font-bold text-orange-600">TrainingDone</h2>
       </section>
       {athlete && (
         <ProfilePic
