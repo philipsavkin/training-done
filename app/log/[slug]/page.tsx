@@ -7,7 +7,6 @@ export default async function LogPage({ params }: { params: { slug: string } }) 
   if (!settings) {
     notFound()
   } else {
-    /* @ts-expect-error Async Server Component */
     return <TrainingLog athleteId={settings.athlete_id} />
   }
 }

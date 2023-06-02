@@ -105,7 +105,6 @@ export async function TrainingLog({ athleteId }: TrainingLogProps) {
   const weekActivities = groupActivitiesByWeek(activities)
   return (
     <main className="container mx-auto p-24 pt-4">
-      {/* @ts-expect-error Async Server Component */}
       <Header />
       <div className="align-items grid grid-cols-8 items-center">
         <div className="border-b-2 border-t-2 py-2 text-center">Week</div>

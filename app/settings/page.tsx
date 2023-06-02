@@ -21,7 +21,6 @@ export default async function Settings() {
 
   return (
     <main className="container mx-auto p-24 pt-4">
-      {/* @ts-expect-error Async Server Component */}
       <Header />
       <div className="p-4">
         <h2 className="text-xl font-bold">Settings</h2>

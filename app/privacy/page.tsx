@@ -3,7 +3,6 @@ import Header from '@/components/header'
 export default function PrivacyPolicy() {
   return (
     <main className="container mx-auto p-24 pt-4">
-      {/* @ts-expect-error Async Server Component */}
       <Header />
       <h2 className="my-8 text-xl font-bold">Privacy Policy</h2>
       <section>
