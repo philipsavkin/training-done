@@ -6,7 +6,6 @@ import StravaProvider from 'next-auth/providers/strava'
 export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/',
-    signOut: '/signout',
   },
   session: {
     strategy: 'jwt',

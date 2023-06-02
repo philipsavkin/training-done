@@ -58,7 +58,6 @@ export default function PrivacyPolicy() {
         If you have any questions or concerns about this privacy policy, please contact us at [insert contact
         information].
       </section>
-      <section>Test codespaces</section>
     </main>
   )
 }

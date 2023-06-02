@@ -5,5 +5,6 @@ import { Landing } from '../components/landing'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
+  // @ts-ignore
   return session ? <TrainingLog athleteId={session.userId} /> : <Landing />
 }
